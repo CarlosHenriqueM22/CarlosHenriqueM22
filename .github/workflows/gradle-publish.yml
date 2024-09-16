@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Jogo Pong</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="game-container">
+        <canvas id="pongCanvas"></canvas>
+    </div>
+    <script src="script.js"></script>
+</body>
+</html>
+
+styles.css
+
+body {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+    background-color: #000;
+}
+
+.game-container {
+    position: relative;
+    width: 1200px;
+    height: 720px;
+    border: 2px solid #fff;
+}
+
+canvas {
+    background-color: #000;
+}
+
+script.js
+
+const canvas = document.getElementById('pongCanvas');
+const ctx = canvas.getContext('2d');
+
+canvas.width = 1200;
+canvas.height = 720;
+
+const paddleWidth = 10;
+const paddleHeight = 100;
+const ballSize = 10;
+
+let leftPaddle = {
+    x: 10,
+    y: canvas.height / 2 - paddleHeight / 2,
+    width: paddleWidth,
+    height: paddleHeight,
+    dy: 4
+};
+
+let rightPaddle = {
+    x: canvas.width - paddleWidth - 10,
+    y: canvas.height / 2 - paddleHeight / 2,
+    width: paddleWidth,
+    height: paddleHeight,
+    dy: 4
+};
+
+let ball = {
+    x: canvas.width / 2,
+    y: canvas.height / 2,
+    size: ballSize,
+    dx: 5,
+    dy: 5
+};
+
+function drawPaddle(paddle) {
+    ctx.fillStyle = '#fff';
+    ctx.fillRect(paddle.x, paddle.y, paddle.width, paddle.height);
+}
+
+function drawBall(ball) {
+    ctx.beginPath();
+    ctx.arc(ball.x, ball.y, ball.size, 0, Math.PI * 2);
+    ctx.fillStyle = '#fff';
+    ctx.fill();
+    ctx.closePath();
+}
+
+function movePaddle(paddle, upKey, downKey) {
+    document.addEventListener('keydown', (e) => {
+        if (e.key === upKey) {
+            paddle.y -= paddle.dy;
+        }
+        if (e.key === downKey) {
+            paddle.y += paddle.dy;
+        }
+    });
+}
+
+function moveBall() {
+    ball.x += ball.dx;
+    ball.y += ball.dy;
+
+    // Ball collision with top and bottom walls
+    if (ball.y + ball.size > canvas.height || ball.y - ball.size < 0) {
+        ball.dy = -ball.dy;
+    }
+
+    // Ball collision with paddles
+    if (
+        (ball.x - ball.size < leftPaddle.x + leftPaddle.width && 
+         ball.y > leftPaddle.y && 
+         ball.y < leftPaddle.y + leftPaddle
