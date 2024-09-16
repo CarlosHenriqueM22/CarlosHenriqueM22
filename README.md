@@ -1,0 +1,2 @@
+- 👀 ESTOU INTERESSADO!
+- 😒 CHATÃO VOCÊ!
